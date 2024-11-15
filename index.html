@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark and Light Mode Clock</title>
+    <style>
+        /* General Styles */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .clock-container {
+            text-align: center;
+        }
+
+        /* Light and Dark Mode Styles */
+        .light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        /* Digital Clock Style */
+        .digital-clock {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* Analog Clock Style */
+        .analog-clock {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            border: 4px solid currentColor;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background-color: currentColor;
+        }
+
+        .hour {
+            width: 6px;
+            height: 40px;
+            transform: rotate(0deg);
+        }
+
+        .minute {
+            width: 4px;
+            height: 50px;
+            transform: rotate(0deg);
+        }
+
+        .second {
+            width: 2px;
+            height: 60px;
+            transform: rotate(0deg);
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            margin-top: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="clock-container">
+        <div class="digital-clock" id="digitalClock"></div>
+        <div class="analog-clock">
+            <div class="hand hour" id="hourHand"></div>
+            <div class="hand minute" id="minuteHand"></div>
+            <div class="hand second" id="secondHand"></div>
+        </div>
+        <button class="toggle-btn" id="toggleButton">Toggle Light/Dark Mode</button>
+    </div>
+
+    <script>
+        const digitalClock = document.getElementById('digitalClock');
+        const hourHand = document.getElementById('hourHand');
+        const minuteHand = document.getElementById('minuteHand');
+        const secondHand = document.getElementById('secondHand');
+        const toggleButton = document.getElementById('toggleButton');
+        const body = document.body;
+
+        // Function to update the clock
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Convert to 12-hour format
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12; // Convert hour '0' to '12'
+
+            // Digital Clock Update with 12-hour format
+            digitalClock.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
+
+            // Analog Clock Update
+            const hoursDeg = (hours % 12) * 30 + (minutes / 2);
+            const minutesDeg = minutes * 6;
+            const secondsDeg = seconds * 6;
+
+            hourHand.style.transform = `rotate(${hoursDeg}deg)`;
+            minuteHand.style.transform = `rotate(${minutesDeg}deg)`;
+            secondHand.style.transform = `rotate(${secondsDeg}deg)`;
+        }
+
+        // Set interval to update the clock every second
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Theme Toggle Functionality
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
